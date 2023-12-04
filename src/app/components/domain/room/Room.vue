@@ -10,26 +10,39 @@ import { useIntersectionObserver } from "@vueuse/core";
 const props = defineProps<{ room: Room }>();
 const state = useState(MessageStore);
 const store = useStore(MessageStore);
-const [messageSerivce] = useProvider([MessageService]);
+const [messageService] = useProvider([MessageService]);
 
-// Element used to know if we should load more message
+
 const top = ref<HTMLDivElement | null>(null);
 
-// Should be use to know the size in px of all the messages displayed
+
 const container = ref<HTMLDivElement | null>(null);
 
-// Element that have the scrollbar
+
 const root = ref<HTMLDivElement | null>(null);
 
+watch(
+  () => props.room,
+  async (newRoom, oldRoom) => {
+    if (newRoom.id !== oldRoom.id) {
+      store.reset();
+      await messageService.fetchMore(newRoom.id);
+      root.value?.scrollTo(0, root.value?.scrollHeight);
+    }
+  }
+);
 </script>
+
 
 <template>
   <div class="room stretch-wh" ref="root">
     <div class="room-container" ref="container">
       <div ref="top"></div>
+      <Message v-for="message in state.currentRoomMessages" :key="message.id" :message="message" />
     </div>
   </div>
 </template>
+
 
 <style lang="scss" scoped>
 .room {

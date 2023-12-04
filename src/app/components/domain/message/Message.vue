@@ -1,37 +1,41 @@
-<script lang="ts" setup>
-import RichText from "@/app/components/ui/RichText.vue";
-import MessageReactions from "./MessageReactions.vue";
+<script setup lang="ts">
+import RichTextComponent from "@/app/components/ui/RichText.vue";
 import BgImage from "../../ui/BgImage.vue";
-import ItiEmojiPicker from "../../ui/emoji-picker/EmojiPicker.vue";
-import EmojiIcon from "../../ui/icons/EmojiIcon.vue";
 import { useProvider } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
-import { type EmojiReaction, type Message } from "@/modules/message/models/domain";
+import type { Message, RichText } from "@/modules/message/models/domain";
 import { DateTime } from "luxon";
 
 const props = defineProps<{
   message: Message;
 }>();
 
-const [messageSerivce] = useProvider([MessageService]);
+const [messageService] = useProvider([MessageService]);
 
+
+const formatDate = (date: Date) => {
+  return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
+};
+console.log('Message Component: Text', props.message.text);
 </script>
 
 <template>
   <div class="message">
     <div class="message-actions">
-      <iti-emoji-picker ref="emojiPicker" @pick="onEmojiPicked" />
-      <el-button :icon="EmojiIcon" circle size="small" @click="$refs.emojiPicker.show()" />
+    
     </div>
 
     <bg-image class="message-user-photo" src="" />
 
     <div class="message-content">
       <div class="message-title">
-        <small class="message-date"></small>
+        <small class="message-date">{{ formatDate(message.creationDate) }}</small>
       </div>
 
+    
+      <RichTextComponent :text="message.text" />
     </div>
+    
   </div>
 </template>
 
@@ -83,4 +87,4 @@ const [messageSerivce] = useProvider([MessageService]);
   }
 }
 </style>
-@/modules/message/models/domain
+

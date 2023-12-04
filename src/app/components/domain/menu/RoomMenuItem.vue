@@ -4,16 +4,29 @@ import { useProvider, useState } from "@/app/platform";
 import { RoomService } from "@/modules/room/services/RoomService";
 import { RoomStore } from "@/modules/room/store";
 import { Plus, Search } from "@element-plus/icons-vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import RoomCreationModal from "@/app/components/domain/room/RoomCreationModal.vue";
 
 const state = useState(RoomStore);
 const [roomService] = useProvider([RoomService]);
-
+const modalRef = ref<InstanceType<typeof RoomCreationModal> | null>(null);
+const searchModalRef = ref<InstanceType<typeof RoomSearchModal> | null>(null);
 onMounted(() => {
   if (state.rooms.length === 0) {
     roomService.fetchMore();
   }
 });
+
+function openModal() {
+  if (modalRef.value) {
+    modalRef.value.show();
+  }
+}
+function openSearchModal() {
+  if (searchModalRef.value) {
+    searchModalRef.value.show();
+  }
+}
 </script>
 
 <template>
@@ -23,11 +36,14 @@ onMounted(() => {
     <div class="room-menu-main">
       <div class="room-menu-name">{{ state.currentRoom?.name }}</div>
       <div class="room-menu-actions">
-        <el-button :icon="Plus" size="default" circle />
-        <el-button :icon="Search" size="default" circle  />
+        <el-button :icon="Plus" size="default" circle @click="openModal" />
+        <el-button :icon="Search" size="default" circle @click="openSearchModal" />
       </div>
     </div>
 
+   
+    <RoomCreationModal ref="modalRef" />
+    <RoomSearchModal ref="searchModalRef" />
   </div>
 </template>
 

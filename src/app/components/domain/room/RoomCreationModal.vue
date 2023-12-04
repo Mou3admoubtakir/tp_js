@@ -4,22 +4,44 @@ import { useRouter } from "vue-router";
 import { useFormModal } from "@/app/components/ui/modal";
 import type { FormInstance, FormRules } from "element-plus";
 import { useProvider } from "@/app/platform";
-import { RoomAPI } from "@/modules/room/services/RoomAPI";
 import { RoomService } from "@/modules/room/services/RoomService";
 import { ElMessage } from "element-plus";
 
-const [roomApi, roomService] = useProvider([RoomAPI, RoomService]);
+const [roomService] = useProvider([RoomService]);
 const form = ref<FormInstance | null>(null);
 const loading = ref(false);
 const router = useRouter();
 
 const formRules = reactive<FormRules>({
-  
+  name: [
+    {
+      required: true,
+      message: "Le nom du salon est obligatoire",
+      trigger: "blur",
+    },
+    // Ajoutez une nouvelle règle pour vérifier la disponibilité du nom du salon
+    {
+      validator: (rule, value, callback) => {
+        roomService.isRoomAvailable(value)
+          .then((isAvailable) => {
+            if (!isAvailable) {
+              callback(new Error("Le nom du salon est déjà pris. Veuillez choisir un autre nom."));
+            } else {
+              callback();
+            }
+          })
+          .catch(() => {
+            callback(new Error("Une erreur s'est produite lors de la validation du nom du salon."));
+          });
+      },
+      trigger: "blur",
+    },
+  ],
 });
 
 const { isVisible, hide, show, formModel } = useFormModal(
   {
-    name: ""
+    name: "",
   },
   form
 );
@@ -31,11 +53,20 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     loading.value = true;
-    await form.validate();
+    const isValid = await form.validate();
 
-    
+    if (!isValid) {
+      return; // Arrêtez le processus si la validation échoue
+    }
+
+    // Créer la salle en utilisant RoomService
+    const newRoom = await roomService.create({ name: formModel.value.name });
+
+    // Rediriger vers la nouvelle salle
+    router.push(`/app/room/${newRoom.id}`);
+    isVisible.value = false;//ensuite fermer la pop up
   } catch (e) {
-    return;
+    console.error("Erreur lors de la création du salon :", e);
   } finally {
     loading.value = false;
   }
@@ -58,7 +89,7 @@ defineExpose({
       @submit.prevent="onSubmit(form!)"
     >
       <el-form-item label="Nom du salon" prop="name">
-     
+        <el-input v-model="formModel.name" type="text"></el-input>
       </el-form-item>
     </el-form>
 

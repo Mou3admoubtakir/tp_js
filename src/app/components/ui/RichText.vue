@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { RichText } from "@/modules/message/models/domain";
 
 defineProps<{
@@ -14,13 +14,13 @@ defineProps<{
     </template>
   </div>
 </template>
-<style scoped>
-.rich-text {
-  display: flex;
 
-  > div {
-    white-space: pre;
+  <style scoped>
+  .rich-text {
+    display: flex;
+
+    > div {
+      white-space: pre;
+    }
   }
-}
-</style>
-@/modules/message/models/domain
+  </style>

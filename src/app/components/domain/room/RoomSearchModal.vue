@@ -39,21 +39,59 @@ async function onSubmit(form?: FormInstance) {
     loading.value = true;
     await form.validate();
 
+    // Redirect to the selected room
+    const selectedRoom = foundRooms.value.find(room => room.id === formModel.value.roomId);
+
+    if (selectedRoom) {
+      // Check if the user is already in the room
+      const isInRoom = await roomService.isInRoom(selectedRoom.id);
+
+      if (isInRoom) {
+        console.log("User is already in the room");
+        // Handle the case where the user is already in the room
+      } else {
+        // Retrieve full details of the room
+        const fullRoomDetails = await roomApi.findById(selectedRoom.id);
+
+        if (fullRoomDetails) {
+          // Join the room and redirect
+          await roomService.join(fullRoomDetails.id);
+          router.push(`/app/room/${fullRoomDetails.id}`);
+        } else {
+          console.error('Room details not found for room ID:', selectedRoom.id);
+          // Handle the case where room details are not available
+        }
+      }
+    } else {
+      console.error('Selected room not found:', formModel.value.roomId);
+    }
+
     hide();
   } catch (e) {
-    return;
+    console.error('Error during search or joining of the room:', e);
+    // Show a user-friendly error message to the user
+    // You can use a UI library to display notifications or create your own logic
   } finally {
     loading.value = false;
   }
 }
 
 /**
- * Search rooms that contains the given text.
+ * Search rooms that contain the given text.
  * Store the result into foundRooms.
- * @param text 
+ * @param text
  */
 async function searchRooms(text: string) {
- 
+  try {
+    loading.value = true;
+    foundRooms.value = await roomApi.search(text);
+  } catch (e) {
+    console.error("Error searching for rooms:", e);
+    // Show a user-friendly error message to the user
+    // You can use a UI library to display notifications or create your own logic
+  } finally {
+    loading.value = false;
+  }
 }
 
 defineExpose({
@@ -103,6 +141,7 @@ defineExpose({
     </template>
   </el-dialog>
 </template>
+
 <style scoped>
 .search-input {
   width: 100%;

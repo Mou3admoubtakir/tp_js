@@ -20,6 +20,25 @@ export class RoomService {
     this.store.appendRoom(room);
   }
 
+  async isRoomAvailable(roomName: string): Promise<boolean> {
+    // Votre logique pour vérifier la disponibilité du nom du salon
+    // Cela pourrait impliquer une requête à l'API pour vérifier la disponibilité du nom
+
+    // Exemple simplifié
+    const existingRooms = this.store.state.rooms;
+    const isAvailable = !existingRooms.some(room => room.name === roomName);
+
+    return isAvailable;
+  }
+  async isInRoom(roomId: string): Promise<boolean> {
+    // Votre logique pour vérifier si l'utilisateur est déjà dans le salon
+    // Cela pourrait impliquer une requête à l'API pour vérifier la présence de l'utilisateur dans le salon
+
+    // Exemple simplifié
+    const existingRooms = this.store.state.rooms;
+    return existingRooms.some(room => room.id === roomId);
+  }
+
   async fetchMore(): Promise<void> {
     const roomsPagination = this.store.state.roomsPagination;
 
