@@ -9,11 +9,12 @@ defineProps<{
 <template>
   <div class="rich-text">
     <template v-for="(token, i) in text.tokens" :key="i">
-      <div v-if="token.type === 'rich'" v-html="token.value"></div>
-      <div v-else>{{ token.value }}</div>
+      <span v-if="token.type === 'rich'" v-html="token.value"></span>
+      <span v-else>{{ token.value }}</span>
     </template>
   </div>
 </template>
+<<<<<<< HEAD
 
   <style scoped>
   .rich-text {
@@ -24,3 +25,12 @@ defineProps<{
     }
   }
   </style>
+=======
+<style scoped>
+.rich-text {
+  > div {
+    white-space: pre-wrap;
+  }
+}
+</style>
+>>>>>>> 5629ba83282a2c34cc950be12200af0246327616

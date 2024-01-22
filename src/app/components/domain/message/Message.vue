@@ -1,10 +1,23 @@
+<<<<<<< HEAD
 <script setup lang="ts">
 import RichTextComponent from "@/app/components/ui/RichText.vue";
 import BgImage from "../../ui/BgImage.vue";
 import { useProvider } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
 import type { Message, RichText } from "@/modules/message/models/domain";
+=======
+<script lang="ts" setup>
+import RichText from "@/app/components/ui/RichText.vue";
+import BgImage from "../../ui/BgImage.vue";
+import ItiEmojiPicker from "../../ui/emoji-picker/EmojiPicker.vue";
+import EmojiIcon from "../../ui/icons/EmojiIcon.vue";
+import MessageAttachements from "./MessageAttachements.vue";
+import { useProvider } from "@/app/platform";
+import { MessageService } from "@/modules/message/services/MessageService";
+>>>>>>> 5629ba83282a2c34cc950be12200af0246327616
 import { DateTime } from "luxon";
+import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
+import { type Message } from "@/modules/message/models/domain";
 
 const props = defineProps<{
   message: Message;
@@ -12,11 +25,17 @@ const props = defineProps<{
 
 const [messageService] = useProvider([MessageService]);
 
+<<<<<<< HEAD
 
 const formatDate = (date: Date) => {
   return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
 };
 console.log('Message Component: Text', props.message.text);
+=======
+function onEmojiPicked(emoji: string) {
+}
+
+>>>>>>> 5629ba83282a2c34cc950be12200af0246327616
 </script>
 
 <template>
@@ -87,4 +106,7 @@ console.log('Message Component: Text', props.message.text);
   }
 }
 </style>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5629ba83282a2c34cc950be12200af0246327616
