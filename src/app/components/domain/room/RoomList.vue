@@ -24,9 +24,9 @@ function selectRoom(room: Room) {
   </nav>
 </template>
 
-<style scoped lang="scss">
-@use 'sass:map';
-@use '@/app/styles/var';
+<style lang="scss" scoped>
+@use "sass:map";
+@use "@/app/styles/var";
 
 .room-list {
   padding-top: 1px;
@@ -40,9 +40,20 @@ function selectRoom(room: Room) {
       text-decoration: none;
       display: block;
 
-      &:hover {
-        background-color: var.$color-light;
-        cursor: pointer;
+      a {
+        color: var.$color-lighter;
+        text-decoration: none;
+        display: block;
+        padding: map-get(var.$spaces, "2xs") map-get(var.$spaces, "xs");
+
+        &:hover {
+          background-color: var.$color-light;
+        }
+
+        &.router-link-active {
+          color: #ffffff;
+          font-weight: 500;
+        }
       }
     }
   }

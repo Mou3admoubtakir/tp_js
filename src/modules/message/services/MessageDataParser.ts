@@ -40,6 +40,6 @@ export class MessageDataParser {
 
     const attachements: MessageAttachement[] = [];
     // TODO
-    return attachements;
+
   }
 }

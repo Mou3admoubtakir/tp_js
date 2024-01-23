@@ -15,19 +15,8 @@ const props = defineProps<{ room: Room }>();
 const state = useState(MessageStore);
 const authState = useState(AuthenticationStore);
 const store = useStore(MessageStore);
-<<<<<<< HEAD
 const [messageService] = useProvider([MessageService]);
 
-=======
-
-const [messageSerivce, messageSocket, roomSocket] = useProvider([
-  MessageService,
-  MessageSocketService,
-  RoomSocketService
-]);
-
-const loading = ref(false);
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616
 
 const top = ref<HTMLDivElement | null>(null);
 
@@ -37,7 +26,6 @@ const container = ref<HTMLDivElement | null>(null);
 
 const root = ref<HTMLDivElement | null>(null);
 
-<<<<<<< HEAD
 watch(
   () => props.room,
   async (newRoom, oldRoom) => {
@@ -48,44 +36,6 @@ watch(
     }
   }
 );
-=======
-subscribeToIncomingMessage();
-
-
-watch(
-  () => props.room,
-  async () => {
-    /**
-     * Each time the room changes, fetch messages and subscribe to new messages
-     */
-    
-    store.reset();
-    await fetchMore();
-
-    subscribeToIncomingMessage();
-  }
-);
-
-function subscribeToIncomingMessage() {
-  // TODO
-}
-
-async function fetchMore() {
-  if (loading.value) {
-    return;
-  }
-
-  try {
-    loading.value = true;
-
-    // TODO fetch more messages
-  } catch (e) {
-    console.error(e);
-  } finally {
-    loading.value = false;
-  }
-}
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616
 </script>
 
 

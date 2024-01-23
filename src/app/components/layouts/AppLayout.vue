@@ -12,9 +12,10 @@ const authState = useState(AuthenticationStore);
 if (authState.token?.bearer) {
   socketConnection.connect(authState.token?.bearer);
 } else {
-  console.warn("Socket connection failed : User not authenticated");
+  console.warn("Socket connection failed: User not authenticated");
 }
 </script>
+
 <template>
   <section class="app-layout full-wh">
     <aside>
@@ -22,18 +23,18 @@ if (authState.token?.bearer) {
     </aside>
 
     <main>
-      <main>
-        <!-- TODO -->
-      </main>
+      <!-- Render the RouterView to display the content based on the route -->
+      <router-view />
 
       <footer>
-        <message-input />
+        <message-input v-bind:message="MessageInput"/>
       </footer>
     </main>
 
     <right-menu />
   </section>
 </template>
+
 <style lang="scss" scoped>
 @use "@/app/styles/var";
 
@@ -50,10 +51,6 @@ if (authState.token?.bearer) {
     flex: 1;
     display: flex;
     flex-direction: column;
-
-    > main {
-      flex: 1;
-    }
 
     > footer {
       height: var.$layout-footer-height;

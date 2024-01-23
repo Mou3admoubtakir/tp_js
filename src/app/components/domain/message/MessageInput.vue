@@ -1,8 +1,9 @@
 <template>
   
   <div class="message-input stretch-wh">
-    <RichTextEditor v-model="userMessage" />
-    <button @click="sendMessage">Envoyer</button>
+    <RichTextEditor  @input="sendMessage"/>
+    
+    
   </div>
   
 </template>
@@ -20,9 +21,10 @@ const roomState = useState(RoomStore);
 const props = defineProps<{
   message: Message;
 }>();
+var hello = 'Hello world';
 const userMessage = ref({ tokens: [] });
 
-const sendMessage = async () => {
+const sendMessage = async (text: RichText) => {
   console.log("sendMessage function called");
 
   if (roomState.currentRoom) {
@@ -35,12 +37,12 @@ const sendMessage = async () => {
       // send the message
       await messageService.sendMessage({
         roomId: roomState.currentRoom?.id,
-        text: userMessage.value
+        text: text
       });
 
       console.log("Message sent successfully.");
       // Reset user input after sending the message
-      userMessage.value = { tokens: [] };
+     // userMessage.value = { tokens: [] };
     } catch (error) {
       console.error("Error sending message:", error);
     }

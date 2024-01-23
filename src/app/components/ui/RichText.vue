@@ -14,7 +14,6 @@ defineProps<{
     </template>
   </div>
 </template>
-<<<<<<< HEAD
 
   <style scoped>
   .rich-text {
@@ -25,12 +24,3 @@ defineProps<{
     }
   }
   </style>
-=======
-<style scoped>
-.rich-text {
-  > div {
-    white-space: pre-wrap;
-  }
-}
-</style>
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616

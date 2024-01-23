@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-<script setup lang="ts">
-import RichTextComponent from "@/app/components/ui/RichText.vue";
-import BgImage from "../../ui/BgImage.vue";
-import { useProvider } from "@/app/platform";
-import { MessageService } from "@/modules/message/services/MessageService";
-import type { Message, RichText } from "@/modules/message/models/domain";
-=======
 <script lang="ts" setup>
 import RichText from "@/app/components/ui/RichText.vue";
 import BgImage from "../../ui/BgImage.vue";
@@ -14,45 +6,48 @@ import EmojiIcon from "../../ui/icons/EmojiIcon.vue";
 import MessageAttachements from "./MessageAttachements.vue";
 import { useProvider } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616
 import { DateTime } from "luxon";
 import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
 import { type Message } from "@/modules/message/models/domain";
-
+import MessageInput from "./MessageInput.vue";
+import { onMounted } from "vue";
+import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
+import { useState } from "@/app/platform";
 const props = defineProps<{
   message: Message;
 }>();
-
+const state = useState(AuthenticationStore);
 const [messageService] = useProvider([MessageService]);
 
-<<<<<<< HEAD
-
-const formatDate = (date: Date) => {
-  return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
-};
-console.log('Message Component: Text', props.message.text);
-=======
 function onEmojiPicked(emoji: string) {
 }
 
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616
+function displayMsg() {
+  console.log(props.message)
+}
+
+const getCurrentDate = () =>{
+  return DateTime.local().toFormat('yyyy-MM-dd');
+}
+
+
 </script>
 
 <template>
-  <div class="message">
+  <div class="message"  @click="displayMsg">
     <div class="message-actions">
-    
+      <iti-emoji-picker ref="emojiPicker" @pick="onEmojiPicked" />
+      <el-button :icon="EmojiIcon" circle size="small" @click="$refs.emojiPicker.show()" />
     </div>
 
-    <bg-image class="message-user-photo" src="" />
+    <bg-image class="message-user-photo" :src="state.loggedUser?.pictureUrl!" />
 
     <div class="message-content">
       <div class="message-title">
-        <small class="message-date">{{ formatDate(message.creationDate) }}</small>
+        <small class="message-date">{{ state.loggedUser?.username }} {{ getCurrentDate() }}</small>
       </div>
 
-    
-      <RichTextComponent :text="message.text" />
+      <RichText :text="message.text" />
     </div>
     
   </div>
@@ -106,7 +101,3 @@ function onEmojiPicked(emoji: string) {
   }
 }
 </style>
-<<<<<<< HEAD
-
-=======
->>>>>>> 5629ba83282a2c34cc950be12200af0246327616
