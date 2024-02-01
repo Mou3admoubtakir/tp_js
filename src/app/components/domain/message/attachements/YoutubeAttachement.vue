@@ -8,8 +8,13 @@ const props = defineProps<{
 </script>
 <template>
   <div class="youtube-attachement light-card">
-    <div class="youtube-attachement-domain"><!-- TODO --></div>
+    <div class="youtube-attachement-domain"> {{ attachement.domain }}<!-- TODO --></div>
         <!-- TODO -->
+         <iframe
+      src="https://www.youtube.com/embed/{{ attachement.videoId }}"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
   </div>
 </template>
 <style lang="scss" scoped>

@@ -8,13 +8,14 @@ import { useProvider } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
 import { DateTime } from "luxon";
 import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
-import { type Message } from "@/modules/message/models/domain";
+import { type Message, type MessageAttachement } from "@/modules/message/models/domain";
 import MessageInput from "./MessageInput.vue";
 import { onMounted } from "vue";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { useState } from "@/app/platform";
 const props = defineProps<{
   message: Message;
+  attachements : MessageAttachement[];
 }>();
 const state = useState(AuthenticationStore);
 const [messageService] = useProvider([MessageService]);
@@ -48,6 +49,8 @@ const getCurrentDate = () =>{
       </div>
 
       <RichText :text="message.text" />
+
+      <MessageAttachements :attachements="message.attachements" />
     </div>
     
   </div>

@@ -40,6 +40,38 @@ export class MessageDataParser {
 
     const attachements: MessageAttachement[] = [];
     // TODO
-
+    if (text.tokens && Array.isArray(text.tokens)) {
+      for (const token of text.tokens) {
+        if (token.type === 'link') {
+          const linkMatches = token.value.match(/(?:https?|ftp):\/\/[^\s/$.?#].[^\s]*$/im);
+          if (linkMatches) {
+            const link = linkMatches[0];
+            if (link) {
+              // type of attachment based on the link
+              if (youtubeRegex.test(link)) {
+                const youtubeMatch = link.match(youtubeRegex);
+                if (youtubeMatch && youtubeMatch[2]) {
+                  attachements.push({
+                    type: "youtube",
+                    videoId: youtubeMatch[2],
+                    domain: 'youtube', 
+                  });
+                }
+              } else if (pictureRegex.test(link)) {
+                attachements.push({
+                  type: "image",
+                  src: link,
+                  
+                });
+              }
+              
+            }
+          }
+        }
+      }
+    }
+  
+    return attachements;
   }
-}
+}  
+

@@ -25,14 +25,14 @@ var hello = 'Hello world';
 const userMessage = ref({ tokens: [] });
 
 const sendMessage = async (text: RichText) => {
-  console.log("sendMessage function called");
+  //console.log("sendMessage function called");
 
   if (roomState.currentRoom) {
-    console.log("Current Room:", roomState.currentRoom);
+    //console.log("Current Room:", roomState.currentRoom);
 
     try {
-      console.log("Sending message...");
-      console.log("User Message:", userMessage.value);
+      //console.log("Sending message...");
+      //console.log("User Message:", userMessage.value);
 
       // send the message
       await messageService.sendMessage({

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import BgImage from "@/app/components/ui/BgImage.vue";
 import { ref, reactive } from "vue";
 import { Plus, Edit } from "@element-plus/icons-vue";
@@ -33,17 +33,17 @@ const isLoading = ref(false);
 const {
   /**
    * Hide the modal
-   * */ 
-  hide, 
+   * */
+  hide,
   /**
    * Open the modal
    */
-  show, 
+  show,
   /**
    * Form data
    */
   formModel,
-  isVisible, 
+  isVisible,
 } = useFormModal(
   {
     username: "",
@@ -80,51 +80,38 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     isLoading.value = true;
+    console.log(formModel.value.username);
+    console.log(formModel.value.picture);
 
-    // TODO
-        
-    hide();
+    await userApi.update({
+      username: formModel.value.username,
+      picture: formModel.value.picture,
+    });
+
+
+    await refreshData();
+
+    hide(); // Close the modal
   } catch (e) {
-    return;
+    console.error(e);
   } finally {
     isLoading.value = false;
   }
 }
-
 defineExpose({
   show,
   hide
-});
+})
 </script>
 
 <template>
-  <el-dialog
-    class="user-profile-edition"
-    v-model="isVisible"
-    title="Edition du profil utilisateur"
-    width="30%"
-  >
-    <el-form
-      ref="form"
-      :model="formModel"
-      :rules="formRules"
-      label-position="top"
-      class="login-form"
-      @submit.prevent="onSubmit($refs.form)"
-    >
+  <el-dialog class="user-profile-edition" v-model="isVisible" title="Edition du profil utilisateur" width="30%">
+    <el-form ref="form" :model="formModel" :rules="formRules" label-position="top" class="login-form"
+      @submit.prevent="onSubmit($refs.form)">
       <el-form-item label="Photo de profil" prop="picture">
-        <el-upload
-          class="avatar-uploader"
-          :show-file-list="false"
-          :auto-upload="false"
-          action="#"
-          :on-change="onFileChange"
-        >
-          <bg-image
-            v-if="formModel.pictureUrl"
-            :src="formModel.pictureUrl"
-            class="user-profile-picture"
-          >
+        <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false" action="#"
+          :on-change="onFileChange">
+          <bg-image v-if="formModel.pictureUrl" :src="formModel.pictureUrl" class="user-profile-picture">
             <div class="user-profile-picture-edit">
               <el-icon class="avatar-uploader-icon" color="#FFFFFF">
                 <Edit />
@@ -145,12 +132,7 @@ defineExpose({
 
     <template #footer>
       <div class="form-actions">
-        <el-button
-          type="primary"
-          native-type="submit"
-          @click="onSubmit($refs.form)"
-          :loading="isLoading"
-        >
+        <el-button type="primary" native-type="submit" @click="onSubmit($refs.form)" :loading="isLoading">
           Mettre à jour
         </el-button>
 
@@ -169,12 +151,12 @@ defineExpose({
     position: relative;
 
     &:hover {
-      > .user-profile-picture-edit {
+      >.user-profile-picture-edit {
         opacity: 1;
       }
     }
 
-    > .user-profile-picture-edit {
+    >.user-profile-picture-edit {
       opacity: 0;
       height: 100%;
       width: 100%;
@@ -188,8 +170,7 @@ defineExpose({
   }
 }
 
-.avatar-uploader .user-profile-picture {
-}
+.avatar-uploader .user-profile-picture {}
 </style>
 
 <style>
@@ -200,8 +181,7 @@ defineExpose({
   overflow: hidden;
 }
 
-.avatar-uploader .el-upload:hover {
-}
+.avatar-uploader .el-upload:hover {}
 
 .el-icon.avatar-uploader-icon {
   font-size: 28px;
